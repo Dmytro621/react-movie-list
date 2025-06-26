@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+nav {
+    padding: 30px;
+    padding-left: 80px;
+    background-color: #12293d;
+    display: flex;
+    gap: 30px;
+}
+
+.main-h {
+    margin-left: 80px;
+}
+
+a {
+    color: #a3c4f3;
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: 600;
+    cursor: pointer; }
+
+.form-to-add-film {
+    max-width: 1000px;
+    margin: 24px auto;
+    padding: 16px 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.form-to-add-film label {
+    display: none;
+}
+
+.form-to-add-film input[type="text"],
+.form-to-add-film input[type="number"],
+.form-to-add-film textarea {
+    padding: 8px 10px;
+    border: 1px solid #cfd8dc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background: #fff;
+    transition: border-color 0.2s;
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.form-to-add-film textarea {
+    min-height: 50px;
+    resize: none;
+    width: 300px;
+}
+
+.form-to-add-film button {
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 6px;
+    background-color: #1976d2;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-to-add-film button:hover {
+    background-color: #155a9c;
+}
+
+.film-list {
+    max-width: 1000px;
+    margin: 24px auto;
+    list-style: none;
+    padding: 0;
+}
