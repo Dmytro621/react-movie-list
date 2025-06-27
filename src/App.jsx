@@ -14,21 +14,66 @@ function Header() {
 function Main() {
   const [inputValues, setInputValues] = useState({
     film: '',
-    age: '',
-    description: ''
+    description: '',
   })
 
   const [filmList, setFilmList] = useState([])
 
   function addFilm() {
-    setFilmList((prev) => [...prev, inputValues])
-    setInputValues({ film: '', age: '', description: '' })
+    if (inputValues.film === '') {
+      return alert('Whrite a movie name!')
+    }  else {
+      fetch(`http://www.omdbapi.com/?apikey=175f84a0&t=${inputValues.film}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data)
+
+          if (data.Response === 'False' || data.Poster === 'N/A') {
+            const filmWithPoster = {
+              ...inputValues,
+              poster: 'https://nftcalendar.io/storage/uploads/2022/02/21/image-not-found_0221202211372462137974b6c1a.png'
+            }
+  
+            setFilmList((prev) => [...prev, filmWithPoster])
+            setInputValues({ film: '', description: '' })
+            return
+          }
+          
+          const filmWithPoster = {
+            film: data.Title,
+            age: data.Year,
+            poster: data.Poster,
+            description: inputValues.description
+          }
+
+          setFilmList((prev) => [...prev, filmWithPoster])
+          setInputValues({ film: '', description: '' })
+
+          
+        })
+        .catch((error) => {
+          console.log(error)
+
+          const filmWithPoster = {
+            ...inputValues,
+            poster: 'https://nftcalendar.io/storage/uploads/2022/02/21/image-not-found_0221202211372462137974b6c1a.png'
+          }
+
+          setFilmList((prev) => [...prev, filmWithPoster])
+          setInputValues({ film: '', description: '' })
+
+        })
+    }
+  }
+
+  function deleteFilm(key) {
+    setFilmList((prevList => prevList.filter((_, index) => index !== key)))
   }
 
   return (
-    <>
+    <main>
       <h1 className='main-h'>Your favourite movie list!</h1>
-      <form action="" className="form-to-add-film">
+      <form action="" className="form-to-add-film" onSubmit={(e) => e.preventDefault()}>
         <input
           type="text"
           placeholder="Harry Potter"
@@ -37,17 +82,6 @@ function Main() {
           onChange={(e) => {
             setInputValues({ ...inputValues, film: e.target.value })
           }}
-        />
-        <input
-          type="number"
-          placeholder="2005"
-          id="releace-year"
-          value={inputValues.age}
-          onChange={(e) => {
-            const onlyDigits = e.target.value.replace(/\D/g, '')
-            if(onlyDigits.length <= 4)  {setInputValues({ ...inputValues, age: onlyDigits })}
-          }}
-          onKeyDown={(e) => { if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') e.preventDefault() }}
         />
         <textarea
           placeholder="This film is very interesting!"
@@ -60,36 +94,47 @@ function Main() {
         ></textarea>
         <button onClick={() => addFilm()} type="button">Add film</button>
       </form>
-      <ul className="film-list">
+      <div className="cards">
         {filmList.map((obj, key) => {
           return (
-            <li key={key}>
+            <div key={key} className='film-card'>
+              <img src={obj.poster} alt={obj.film} />
               <p>{obj.film}</p>
               <p>{obj.age}</p>
-              <p>{obj.description}</p>
-            </li>
+              <button className='delete-card' onClick={() => {deleteFilm(key)}}>Delete</button>
+            </div>
           )
         })}
-      </ul>
-    </>
+      </div>
+    </main>
+  )
+}
+
+function Footer() {
+  return (
+    <footer>
+      <a href="https://github.com/Dmytro621" target='_blank'>My github!</a>
+    </footer>
   )
 }
 
 function About() {
   return (
     <><h2>You can save your favourite movie here!</h2></>
-
   )
 }
 
 function App() {
   return (
     <>
-      <Header/>
-      <Routes>
-        <Route path='*' element={<Main />} />
-        <Route path='/about' element={<About/>} />
-      </Routes>
+      <div className="wrapper">
+        <Header/>
+        <Routes>
+          <Route path='*' element={<Main />} />
+          <Route path='/about' element={<About/>} />
+        </Routes>
+        <Footer/>
+      </div>
     </>
   )
 }
