@@ -17,12 +17,15 @@ function Main() {
     description: "",
   });
 
-  const [filmList, setFilmList] = useState([]);
+  const [filmList, setFilmList] = useState(() => {
+    const saved = localStorage.getItem('filmList')
+    return saved ? JSON.parse(saved) : []
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFilm, setSelectedFilm] = useState(null);
 
   function addFilm() {
-    if (inputValues.film === "") {
+    if (inputValues.film.trim() === "") {
       return alert("Whrite a movie name!");
     } else {
       setIsLoading(true);
@@ -82,7 +85,9 @@ function Main() {
     setSelectedFilm(obj);
   }
 
-  // useEffect(() => {}, [filmList]);
+  useEffect(() => {
+    localStorage.setItem('filmList', JSON.stringify(filmList))
+  }, [filmList]);
 
   return (
     <main>
